@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3002",
+    origin: "http://localhost:4000",
   })
 ); // cors middleware
 app.use(express.json()); // middleware: parse incoming json from incoming request
