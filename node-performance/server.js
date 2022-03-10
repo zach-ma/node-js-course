@@ -1,4 +1,6 @@
 const express = require("express");
+const cluster = require("cluster");
+const os = require("os");
 
 const app = express();
 
@@ -17,14 +19,26 @@ app.get("/", (req, res) => {
    * [......].sort()
    * crypto
    */
-  res.send("Performance example");
+  res.send(`Performance example ${process.pid}`);
 });
 
 app.get("/timer", (req, res) => {
-  delay(5000);
-  res.send("Ding!");
+  delay(9000);
+  res.send(`Ding! ${process.pid}`);
 });
 
-app.listen((PORT = 3000), () => {
-  console.log(`Listening on port ${PORT}...`);
-});
+console.log("Running server.js...");
+if (cluster.isMaster) {
+  console.log("Master has been started...");
+
+  const NUM_WORKERS = os.cpus().length;
+  console.log(NUM_WORKERS + " cores");
+  for (let i = 0; i < NUM_WORKERS; i++) {
+    cluster.fork();
+  }
+} else {
+  console.log("Worker process started.");
+  app.listen((PORT = 3000), () => {
+    console.log(`Listening on port ${PORT}...`);
+  });
+}
