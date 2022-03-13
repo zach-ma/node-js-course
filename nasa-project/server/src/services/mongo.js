@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
-const MONGO_URL =
-  "mongodb+srv://nasa-api:DMc0MxyoFJs9wyiM@nasa-cluster.gj6z7.mongodb.net/nasa?retryWrites=true&w=majority";
+require("dotenv").config();
+
+const MONGO_URL = process.env.MONGO_URL;
 
 // event emitter, only triggered once
 mongoose.connection.once("open", () => {
